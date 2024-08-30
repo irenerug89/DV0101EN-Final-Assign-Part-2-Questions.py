@@ -33,27 +33,25 @@ year_list = [i for i in range(1980, 2024, 1)]
 #---------------------------------------------------------------------------------------
 # Create the layout of the app
 app.layout = html.Div([
-    #TASK 2.1 Add title to the dashboard
-    html.H1("Automobile Sales Statistics Dashboard", style={'textAlign':'center','color':'#503D36','font-size':24}),#Include style for title
-    #TASK 2.2: Add two dropdown menus
-    html.Div([
-        html.Label("Select Statistics:"),
-        dcc.Dropdown(
-            id='dropdown-statistics',
-            options=[{'label': 'Yearly Statistics', 'value': 'Yearly Statistics'},{'label': 'Recession Period Statistics', 'value': 'Recession Period Statistics'}],
-            value='Select Statistics',
-            placeholder='Select a report type'
-        )
-    ]),
-    html.Div(dcc.Dropdown(
-            id='select-year',
-            options=[{'label': i, 'value': i} for i in year_list],
-            placeholder='Select year',
-            value='select-year'
-        )),
-    html.Div([#TASK 2.3: Add a division for output display
-    html.Div(id='output-container', className='chart-grid', style={'display':'flex'}),])
-])
+      html.H1("Automobile Statistics Dashboard"),
+      html.Div([
+          html.Label("Select Statistics:"),
+          dcc.Dropdown(
+              id='dropdown-statistics',
+              options=dropdown_options,
+              value='Select Statistics'
+          )
+      ]),
+      html.Div(dcc.Dropdown(
+              id='select-year',
+              options=[{'label': i, 'value': i} for i in year_list],
+              value='Select-year'
+          )),
+     
+      html.Div([
+      html.Div(id='output-container', className='chart-grid', style={'display': 'flex'}),
+      ])
+  ])
 #TASK 2.4: Creating Callbacks
 # Define the callback function to update the input container based on the selected statistics
 @app.callback(
@@ -86,7 +84,7 @@ def update_output_container(selected_statistics, input_year):
         R_chart1 = dcc.Graph(
             figure=px.line(yearly_rec, 
                 x='Year',
-                y='Auto Sales',
+                y='Automobile_Sales',
                 title="Average Automobile Sales fluctuation over Recession Period"))
 
 #Plot 2 Calculate the average number of vehicles sold by vehicle type       
@@ -153,12 +151,11 @@ def update_output_container(selected_statistics, input_year):
   # Plot bar chart for average number of vehicles sold during the given year
          # grouping data for plotting.
          # Hint:Use the columns Year and Automobile_Sales
-        avr_vdata=data.groupby('Year')['Automobile_Sales'].mean().reset_index()
-        Y_chart3 = dcc.Graph( 
-            figure=px.bar(avr_vdata,
-            x='Year',
-            y='Automobile_Sales',
-            title='Average Vehicles Sold by Vehicle Type in the year {}'.format(input_year)))
+        avr_vdata=data.groupby('Vehicle_Type')['Automobile_Sales'].mean().reset_index()
+        Y_chart3 = dcc.Graph( figure=px.bar(avr_vdata, 
+                                              x='Vehicle_Type',
+                                              y='Automobile_Sales',
+                                              title='Average Vehicles Sold by Vehicle Type in the year {}'.format(input_year)))
 
     # Total Advertisement Expenditure for each vehicle using pie chart
          # grouping data for plotting.
@@ -171,7 +168,7 @@ def update_output_container(selected_statistics, input_year):
 
 #TASK 2.6: Returning the graphs for displaying Yearly data
     else: 
-        return
+        return None
 
 # Run the Dash app
 if __name__ == '__main__':
