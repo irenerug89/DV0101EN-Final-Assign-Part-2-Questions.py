@@ -33,7 +33,7 @@ year_list = [i for i in range(1980, 2024, 1)]
 #---------------------------------------------------------------------------------------
 # Create the layout of the app
 app.layout = html.Div([
-      html.H1("Automobile Statistics Dashboard"),
+      html.H1("Automobile Statistics Dashboard"), style= {"TextAlign":"center","color":"#503D36","font-size":24},
       html.Div([
           html.Label("Select Statistics:"),
           dcc.Dropdown(
